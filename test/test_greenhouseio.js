@@ -1,23 +1,18 @@
 var assert = require('chai').assert;
 
-var greenhouse = require('../greenhouseio.js');
-var AUTH = require('../keys.greenhouse.json');
+var Greenhouse = require('../greenhouseio.js');
+var AUTH = require('../keys.company.json');
 
-// let's use greenhouse's own jobs for now
-var COMPANY_NAME = "greenhouse";
 
-// TODO: mock the responders via Sinon? - pk
+var gh = Greenhouse(AUTH.COMPANY, AUTH.API_KEY);
 
-/*
+gh.request('offices')
 
-  desired API:
+gh.request('candidates')
 
-  var gh = Greenhouse("company_name", "API_key");
+// gh.get('offices');
 
-  gh.get('offices');
+// gh.get('office', 81);
 
-  gh.get('office', 81);
+// gh.post('application', requestBody);
 
-  gh.post('application', requestBody);
-
- */

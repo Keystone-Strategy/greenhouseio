@@ -1,6 +1,7 @@
 var request = require('request-promise');
 
 var API_ROOT = 'https://api.greenhouse.io/v1/boards/';
+var HARVEST_API_ROOT = 'https://harvest.greenhouse.io/v1/'
 
 function GreenhouseRequest(company_name, api_key) {
 
@@ -15,6 +16,15 @@ function GreenhouseRequest(company_name, api_key) {
     applications: ['postBody'] // a parsed/converted post body via .post()
   }
 
+  var HARVEST_ENDPOINTS = {
+    candidates: null
+  }
+
+  var ENDPOINTS = {
+    'GH': {'OBJECTS':GH_ENDPOINTS, 'URI': API_ROOT, 'AUTH':false},
+    'HARVEST':{'OBJECTS':HARVEST_ENDPOINTS, 'URI': HARVEST_API_ROOT, 'AUTH':true}
+  }
+
   // for job applications, use basic auth, username == API KEY, blank pass
   // we're doing this here because require-promise hid the interface for auth...
   GH_APPLICATIONS = 'https://' + api_key + ':@api.greenhouse.io/v1/applications/';
@@ -24,7 +34,7 @@ function GreenhouseRequest(company_name, api_key) {
 
   function _validateEndpoint(endpoint, params) {
 
-    if(! (endpoint in GH_ENDPOINTS) ) {
+    if(!(endpoint in GH_ENDPOINTS) && !(endpoint in HARVEST_ENDPOINTS) ) {
       throw new Error("'" + endpoint + "' is not supported by Greenhouse");
     }
 
@@ -37,7 +47,31 @@ function GreenhouseRequest(company_name, api_key) {
     }
 
   }
+  function _getApiUri(endpoint){
+    for (EP in ENDPOINTS){
+      if (Object.keys(ENDPOINTS[EP]['OBJECTS']).indexOf(endpoint) >= 0) {
+        return EP;
+      }
+    }
+  }
 
+  function _getOptions(endpoint){
+    var EP = _getApiUri(endpoint);
+
+    var options = {
+      uri: ENDPOINTS[EP]['URI'] + endpoint,
+    };
+
+    if (ENDPOINTS[EP]['AUTH']){
+      options['auth'] = {
+        user: api_key,
+        password: ''
+      }
+    }
+
+    return options;
+
+  }
   function _ghRequest(endpoint, params, postBody, cb) {
 
     _validateEndpoint(endpoint, params);
@@ -46,9 +80,11 @@ function GreenhouseRequest(company_name, api_key) {
     // might we worth dropping request-promise in favor of this native wrapper...
     return new Promise(function(fulfill, reject) {
 
-      var options = {
-        uri: api_uri + endpoint
-      };
+
+      var options = _getOptions(endpoint)
+
+      console.log(options);
+
 
       if(endpoint === 'applications' && params) {
 
@@ -73,7 +109,6 @@ function GreenhouseRequest(company_name, api_key) {
         }
       }
 
-      console.log(options);
 
       // make the actual API request
       request(options).then(function(response) {
@@ -97,7 +132,5 @@ function GreenhouseRequest(company_name, api_key) {
 
   return module;
 }
-
-var gh = require('greenhouseio');
 
 module.exports = exports = GreenhouseRequest;
