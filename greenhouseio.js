@@ -23,15 +23,13 @@ function GreenhouseRequest(company_name, api_key) {
   }
 
   var ENDPOINTS = {
-    'GH': {'OBJECTS':GH_ENDPOINTS, 'URI': API_ROOT, 'AUTH':false},
+    'GH': {'OBJECTS':GH_ENDPOINTS, 'URI': API_ROOT + company_name + '/embed/', 'AUTH':false},
     'HARVEST':{'OBJECTS':HARVEST_ENDPOINTS, 'URI': HARVEST_API_ROOT, 'AUTH':true}
   }
 
   // for job applications, use basic auth, username == API KEY, blank pass
   // we're doing this here because require-promise hid the interface for auth...
   GH_APPLICATIONS = 'https://' + api_key + ':@api.greenhouse.io/v1/applications/';
-
-  var api_uri = API_ROOT + company_name + '/embed/';
   var module = {};
 
   function _validateEndpoint(endpoint, params) {
