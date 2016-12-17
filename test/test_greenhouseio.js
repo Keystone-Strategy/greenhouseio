@@ -10,6 +10,8 @@ gh.request('offices')
 
 gh.request('candidates')
 
+gh.request('applications')
+
 // gh.get('offices');
 
 // gh.get('office', 81);

@@ -13,11 +13,12 @@ function GreenhouseRequest(company_name, api_key) {
     department:   ['id'], // ?id={{departmentId}}
     jobs:         null,
     job:          ['id'], // ?id={{jobId}}&questions=true
-    applications: ['postBody'] // a parsed/converted post body via .post()
+    // applications: ['postBody'] // a parsed/converted post body via .post()
   }
 
   var HARVEST_ENDPOINTS = {
-    candidates: null
+    candidates: null,
+    applications: null
   }
 
   var ENDPOINTS = {
@@ -38,11 +39,11 @@ function GreenhouseRequest(company_name, api_key) {
       throw new Error("'" + endpoint + "' is not supported by Greenhouse");
     }
 
-    if(endpoint in ['office', 'job', 'department'] && !params.hasOwnProperty('id')) {
+    if((endpoint in GH_ENDPOINTS) && (endpoint in ['office', 'job', 'department']) && !params.hasOwnProperty('id')) {
       throw new Error("'" + endpoint + "' requires id parameter to be set");
     }
 
-    if(endpoint === 'applications' && !params.postBody) {
+    if((endpoint in GH_ENDPOINTS) && (endpoint === 'applications') && !params.postBody) {
       throw new Error("'/applications' requires a form post body");
     }
 
