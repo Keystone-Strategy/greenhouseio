@@ -12,6 +12,8 @@ gh.request('candidates')
 
 gh.request('applications')
 
+gh.request('job_stages')
+
 // gh.get('offices');
 
 // gh.get('office', 81);

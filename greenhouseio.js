@@ -18,7 +18,8 @@ function GreenhouseRequest(company_name, api_key) {
 
   var HARVEST_ENDPOINTS = {
     candidates: null,
-    applications: null
+    applications: null,
+    job_stages: null
   }
 
   var ENDPOINTS = {
