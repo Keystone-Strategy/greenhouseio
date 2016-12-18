@@ -1,4 +1,4 @@
-var request = require('request-promise');
+var rp = require('request-promise');
 
 var API_ROOT = 'https://api.greenhouse.io/v1/boards/';
 var HARVEST_API_ROOT = 'https://harvest.greenhouse.io/v1/'
@@ -111,7 +111,7 @@ function GreenhouseRequest(company_name, api_key) {
 
 
       // make the actual API request
-      request(options).then(function(response) {
+      rp(options).then(function(response) {
           /* TMP hack for false 200 response from GH */
           if (response.substr(0, 1) === "<") {
             // if we get HTML back from API, it's a bad response - pk
