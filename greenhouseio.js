@@ -111,7 +111,9 @@ function GreenhouseRequest(company_name, api_key) {
 
 
       // make the actual API request
-      rp(options).then(function(response) {
+      rp(options)
+        .promise()
+        .then(function(response) {
           /* TMP hack for false 200 response from GH */
           if (response.substr(0, 1) === "<") {
             // if we get HTML back from API, it's a bad response - pk
