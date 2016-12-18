@@ -65,7 +65,8 @@ function GreenhouseRequest(company_name, api_key) {
     if (ENDPOINTS[EP]['AUTH']){
       options['auth'] = {
         user: api_key,
-        password: ''
+        password: '',
+        method: 'GET'
       }
     }
 
@@ -112,7 +113,7 @@ function GreenhouseRequest(company_name, api_key) {
 
       // make the actual API request
       rp(options)
-        .promise()
+        // .promise()
         .then(function(response) {
           /* TMP hack for false 200 response from GH */
           if (response.substr(0, 1) === "<") {
